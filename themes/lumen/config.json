@@ -1,0 +1,49 @@
+{
+  "background_color": "#05070D",
+
+  "wallpaper": true,
+  "wallpaper_rotation_minutes": 60,
+  "wallpaper_order": "sequential",
+  "wallpaper_moods": {
+    "morning": ["morning.jpg"],
+    "evening": ["evening.jpg"],
+    "night": ["night.jpg"]
+  },
+  "wallpaper_dim": 10,
+
+  "cinematic_home": true,
+  "cinematic_dots": true,
+  "cinematic_art": 45,
+  "cinematic_scrim": 70,
+  "dock_glass": true,
+  "dock_even_padding": true,
+  "dock_title": true,
+  "columns": 5,
+  "rows_below_dock": 1,
+  "fade_rows": true,
+
+  "glass_style": "glass",
+  "app_glow": true,
+  "glow_style": "radial",
+  "ambient_glow": true,
+
+  "animations": true,
+  "advanced_effects": true,
+  "focus_overshoot": false,
+
+  "icon_only_buttons": true,
+  "icon_only_inputs": true,
+  "wifi_status_color": true,
+  "wifi_status_warnings": true,
+  "wifi_label_width": 140,
+
+  "app_library": true,
+  "library_button": true,
+  "show_library_pill": false,
+  "tile_menu": true,
+  "open_on_start_choice": true,
+
+  "home_idle_clock_minutes": 10,
+  "clock_wallpaper": true,
+  "clock_wallpaper_dim": 55
+}

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- glass_tiles top-bar pill: dark glass with a fine light rim like the Home center's panels; white when focused. -->
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_focused="true">
+        <shape android:shape="rectangle">
+            <solid android:color="#F2FAF8F2" />
+            <corners android:radius="21dp" />
+        </shape>
+    </item>
+    <item android:state_activated="true">
+        <shape android:shape="rectangle">
+            <solid android:color="#596EC1FF" />
+            <stroke android:width="1.5dp" android:color="#FF6EC1FF" />
+            <corners android:radius="21dp" />
+        </shape>
+    </item>
+    <item>
+        <shape android:shape="rectangle">
+            <gradient android:angle="270" android:startColor="#66202022" android:endColor="#4D161618" />
+            <stroke android:width="1dp" android:color="#33FFFFFF" />
+            <corners android:radius="21dp" />
+        </shape>
+    </item>
+</selector>

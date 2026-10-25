@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Line icon for the top bar's glass capsule (top_capsule), matching the Home center's 1.8-wide strokes. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="22dp" android:height="22dp"
+    android:viewportWidth="24" android:viewportHeight="24">
+    <path android:strokeColor="#FFFFFFFF" android:strokeWidth="1.9" android:strokeLineCap="round" android:strokeLineJoin="round" android:pathData="M5.5,4h4a1.5,1.5 0,0 1,1.5 1.5v4a1.5,1.5 0,0 1,-1.5 1.5h-4A1.5,1.5 0,0 1,4 9.5v-4A1.5,1.5 0,0 1,5.5 4z" />
+    <path android:strokeColor="#FFFFFFFF" android:strokeWidth="1.9" android:strokeLineCap="round" android:strokeLineJoin="round" android:pathData="M14.5,4h4a1.5,1.5 0,0 1,1.5 1.5v4a1.5,1.5 0,0 1,-1.5 1.5h-4A1.5,1.5 0,0 1,13 9.5v-4A1.5,1.5 0,0 1,14.5 4z" />
+    <path android:strokeColor="#FFFFFFFF" android:strokeWidth="1.9" android:strokeLineCap="round" android:strokeLineJoin="round" android:pathData="M5.5,13h4a1.5,1.5 0,0 1,1.5 1.5v4a1.5,1.5 0,0 1,-1.5 1.5h-4A1.5,1.5 0,0 1,4 18.5v-4A1.5,1.5 0,0 1,5.5 13z" />
+    <path android:strokeColor="#FFFFFFFF" android:strokeWidth="1.9" android:strokeLineCap="round" android:strokeLineJoin="round" android:pathData="M14.5,13h4a1.5,1.5 0,0 1,1.5 1.5v4a1.5,1.5 0,0 1,-1.5 1.5h-4A1.5,1.5 0,0 1,13 18.5v-4A1.5,1.5 0,0 1,14.5 13z" />
+</vector>

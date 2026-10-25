@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Glass theme top-bar icon: a 1.7-wide line on a 24-unit grid, like the Home center's icons. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="22dp" android:height="22dp"
+    android:viewportWidth="24" android:viewportHeight="24">
+    <path android:strokeColor="#FFFFFFFF" android:strokeWidth="1.7" android:strokeLineCap="round" android:strokeLineJoin="round" android:pathData="M4,7h9M17,7h3M4,17h3M11,17h9" />
+    <path android:strokeColor="#FFFFFFFF" android:strokeWidth="1.7" android:strokeLineCap="round" android:strokeLineJoin="round" android:pathData="M15,7m-2,0a2,2 0,1 1,4 0a2,2 0,1 1,-4 0" />
+    <path android:strokeColor="#FFFFFFFF" android:strokeWidth="1.7" android:strokeLineCap="round" android:strokeLineJoin="round" android:pathData="M9,17m-2,0a2,2 0,1 1,4 0a2,2 0,1 1,-4 0" />
+</vector>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- soft_motion: an app opens as a slow, gentle fade with the faintest settle, nothing that reads as a zoom. -->
+<set xmlns:android="http://schemas.android.com/apk/res/android"
+    android:interpolator="@android:interpolator/decelerate_quad"
+    android:duration="340">
+    <alpha android:fromAlpha="0.0" android:toAlpha="1.0" />
+    <scale android:fromXScale="0.985" android:toXScale="1.0"
+        android:fromYScale="0.985" android:toYScale="1.0"
+        android:pivotX="50%" android:pivotY="50%" />
+</set>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- A top-bar button inside the glass capsule (top_capsule): nothing of its own until focused, then the same white
+     slab as pill_bg. The capsule behind the row is the glass. -->
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_focused="true">
+        <shape android:shape="rectangle">
+            <solid android:color="#F5FFFFFF" />
+            <corners android:radius="21dp" />
+        </shape>
+    </item>
+    <item android:state_activated="true">
+        <shape android:shape="rectangle">
+            <solid android:color="#596EC1FF" />
+            <corners android:radius="21dp" />
+        </shape>
+    </item>
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="#00000000" />
+            <corners android:radius="21dp" />
+        </shape>
+    </item>
+</selector>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Home center (theme key home_center). English only for now: these fall back to English in every language. -->
+<resources>
+    <string name="home_center_search" translatable="false">Search apps, or ask Google</string>
+    <string name="home_center_picture" translatable="false">Picture</string>
+    <string name="home_center_sound" translatable="false">Sound</string>
+    <string name="home_center_clock" translatable="false">Clock</string>
+    <string name="home_center_continue" translatable="false">CONTINUE</string>
+    <string name="home_center_last_opened" translatable="false">Last opened</string>
+    <string name="home_center_empty" translatable="false">Apps you open from Home will show up here</string>
+    <string name="qp_title" translatable="false">Quick panel</string>
+    <string name="qp_bluetooth" translatable="false">Bluetooth</string>
+    <string name="qp_on" translatable="false">On</string>
+    <string name="qp_off" translatable="false">Off</string>
+    <string name="qp_connected" translatable="false">Connected</string>
+    <string name="qp_sources" translatable="false">Sources</string>
+    <string name="qp_display" translatable="false">Display</string>
+    <string name="qp_volume" translatable="false">Volume, output</string>
+    <string name="qp_screensaver" translatable="false">Screensaver</string>
+    <string name="qp_start_now" translatable="false">Start now</string>
+    <string name="qp_recent" translatable="false">RECENT</string>
+    <string name="qp_tv_settings" translatable="false">TV settings</string>
+    <string name="home_center_now_playing" translatable="false">NOW PLAYING</string>
+    <string name="home_center_play" translatable="false">Play</string>
+    <string name="home_center_pause" translatable="false">Pause</string>
+    <string name="qp_sleep" translatable="false">Sleep timer</string>
+    <string name="qp_sleep_off" translatable="false">Off</string>
+    <string name="qp_sleep_in" translatable="false">Off in %d min</string>
+</resources>
