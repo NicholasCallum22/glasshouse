@@ -1,0 +1,433 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Glasshouse</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Glasshouse is a calm glass home screen for Android TV and Google TV: tinted glass app tiles, a colour wash, Now Playing and a Quick panel, with no ads. Installed over Wi-Fi.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Glasshouse: your TV, without the billboard">
+<meta property="og:description" content="A calm glass home screen for Google TV and Android TV. No ads, free and open source.">
+<meta property="og:url" content="https://nicholascallum22.github.io/glasshouse/">
+<meta property="og:image" content="https://nicholascallum22.github.io/glasshouse/img/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#0d0e0f">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..600&family=Figtree:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: a dark living room. The TV screenshot is the only light source, and the page glows in the colour of
+   whatever app is on screen, the way Glasshouse's own wash does. One deliberately dark look. */
+:root {
+  --room: #0d0e0f;          /* the room at night */
+  --glass: rgba(255,255,255,0.055);
+  --rim: rgba(255,255,255,0.12);
+  --fg: #f1eee7;            /* the cream of Glasshouse's glyphs */
+  --dim: #a9a59c;
+  --faint: #6f6c66;
+  --seafoam: #a6e8d6;       /* the launcher's control accent */
+  --wr: 214; --wg: 120; --wb: 120;   /* the focused app's colour; registered below so it fades */
+  --display: "Bricolage Grotesque", "Avenir Next", "Segoe UI", system-ui, sans-serif;
+  --body: "Figtree", "Helvetica Neue", "Segoe UI", system-ui, sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+  color-scheme: dark;
+  transition: --wr 1.8s ease, --wg 1.8s ease, --wb 1.8s ease;
+}
+@property --wr { syntax: "<number>"; inherits: true; initial-value: 214; }
+@property --wg { syntax: "<number>"; inherits: true; initial-value: 120; }
+@property --wb { syntax: "<number>"; inherits: true; initial-value: 120; }
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0; background: var(--room); color: var(--fg);
+  font: 400 1.0625rem/1.6 var(--body);
+  -webkit-font-smoothing: antialiased;
+}
+body::before {   /* the wash: the room lit by the TV */
+  content: ""; position: fixed; inset: 0; z-index: -1; pointer-events: none;
+  background:
+    radial-gradient(60rem 40rem at 78% -6%, rgb(var(--wr) var(--wg) var(--wb) / 0.30), transparent 70%),
+    radial-gradient(48rem 34rem at 4% 46%, rgb(var(--wr) var(--wg) var(--wb) / 0.12), transparent 70%),
+    var(--room);
+}
+a { color: inherit; }
+.wrap {
+  max-width: 72rem; margin: 0 auto;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+.mono { font-family: var(--mono); font-size: 0.8125rem; letter-spacing: 0.01em; }
+.label { font: 500 0.75rem/1 var(--body); letter-spacing: 0.18em; text-transform: uppercase; color: var(--dim); }
+:focus-visible { outline: 2px solid var(--seafoam); outline-offset: 3px; border-radius: 6px; }
+
+/* nav */
+nav.wrap { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding-block: 1.25rem; }
+.mark { display: flex; align-items: center; gap: 0.6rem; font: 500 1.125rem/1 var(--display); text-decoration: none; letter-spacing: -0.01em; }
+.mark i { width: 1.35rem; height: 1.35rem; border-radius: 30%; background: linear-gradient(160deg, rgba(255,255,255,.28), rgba(255,255,255,.06)); border: 1px solid var(--rim); }
+.navlinks { display: flex; gap: 1.5rem; flex-wrap: wrap; }
+.navlinks a { text-decoration: none; color: var(--dim); font-size: 0.9375rem; }
+.navlinks a:hover { color: var(--fg); }
+
+/* hero */
+.hero { padding-block: 3.5rem 2rem; display: grid; gap: 2.75rem; }
+h1 {
+  margin: 0; font: 250 clamp(2.6rem, 6.4vw, 5.25rem)/0.98 var(--display);
+  font-variation-settings: "opsz" 96; letter-spacing: -0.035em; text-wrap: balance; max-width: 15ch;
+}
+h1 em { font-style: normal; font-weight: 450; }
+.lede { margin: 1.25rem 0 0; max-width: 34rem; color: var(--dim); font-size: 1.1875rem; }
+.ctas { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 2rem; align-items: center; }
+.btn {
+  display: inline-flex; align-items: center; gap: 0.55rem; padding: 0.85rem 1.35rem; border-radius: 999px;
+  font: 600 0.9875rem/1 var(--body); text-decoration: none; border: 1px solid var(--rim); transition: transform .3s ease, background .3s ease;
+}
+.btn:hover { transform: translateY(-1px); }
+.btn.primary { background: var(--fg); color: var(--room); border-color: transparent; }
+.btn.ghost { background: var(--glass); }
+.spec { margin-top: 1.5rem; color: var(--faint); }
+.tv {
+  position: relative; border-radius: 1.1rem; padding: 0.6rem; background: #050505;
+  border: 1px solid rgba(255,255,255,.08);
+  box-shadow: 0 2.5rem 6rem -1.5rem rgb(var(--wr) var(--wg) var(--wb) / 0.45), 0 1rem 3rem rgba(0,0,0,.6);
+}
+.tv .screen { position: relative; aspect-ratio: 16 / 9; max-width: 100%; border-radius: 0.6rem; overflow: hidden; background: #111; }
+.tv img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: opacity 1.4s ease; }
+.tv img + img { opacity: 0; }
+.tv.alt img + img { opacity: 1; }
+.tv figcaption { display: flex; justify-content: space-between; gap: 1rem; padding: 0.7rem 0.4rem 0.15rem; color: var(--faint); }
+
+/* screens */
+section { padding-block: 4.5rem; }
+h2 { margin: 0.6rem 0 0; font: 300 clamp(1.9rem, 3.6vw, 2.9rem)/1.05 var(--display); letter-spacing: -0.025em; text-wrap: balance; max-width: 22ch; }
+.sub { color: var(--dim); max-width: 36rem; margin: 1rem 0 0; }
+.screens { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.25rem; margin-top: 2.5rem; }
+.screens figure { margin: 0; min-width: 0; }
+.screens img { display: block; width: 100%; height: auto; aspect-ratio: 16 / 9; object-fit: cover; border-radius: 0.65rem; border: 1px solid rgba(255,255,255,.07); }
+.screens figcaption { margin-top: 0.75rem; font-size: 0.9375rem; color: var(--dim); }
+.screens figcaption b { display: block; color: var(--fg); font-weight: 600; margin-bottom: 0.15rem; }
+
+/* features */
+.features { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 3rem; margin-top: 2.5rem; }
+.feature { display: grid; grid-template-columns: 2.6rem 1fr; gap: 1rem; padding-block: 1.25rem; border-top: 1px solid rgba(255,255,255,.08); min-width: 0; }
+.feature .sq { width: 2.6rem; height: 2.6rem; border-radius: 30%; display: grid; place-items: center; background: linear-gradient(160deg, rgba(255,255,255,.12), rgba(255,255,255,.03)); border: 1px solid var(--rim); color: var(--fg); }
+.feature h3 { margin: 0; font: 500 1.0625rem/1.3 var(--body); }
+.feature p { margin: 0.3rem 0 0; color: var(--dim); font-size: 0.9875rem; }
+
+/* install */
+.install { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); gap: 3rem; align-items: start; margin-top: 2.5rem; }
+.steps { list-style: none; margin: 0; padding: 0; display: grid; gap: 1.4rem; counter-reset: s; }
+.steps li { display: grid; grid-template-columns: 2rem 1fr; gap: 0.9rem; counter-increment: s; }
+.steps li::before { content: counter(s); font: 400 0.8125rem/2rem var(--mono); text-align: center; height: 2rem; border-radius: 50%; border: 1px solid var(--rim); color: var(--seafoam); }
+.steps b { display: block; font-weight: 600; }
+.steps span { color: var(--dim); font-size: 0.9875rem; }
+.term { border-radius: 0.9rem; background: rgba(0,0,0,.55); border: 1px solid rgba(255,255,255,.08); overflow: hidden; }
+.term .bar { display: flex; gap: 0.4rem; padding: 0.75rem 1rem; border-bottom: 1px solid rgba(255,255,255,.06); }
+.term .bar i { width: 0.6rem; height: 0.6rem; border-radius: 50%; background: rgba(255,255,255,.14); }
+.term pre { margin: 0; padding: 1.1rem 1.2rem 1.3rem; overflow-x: auto; font: 400 0.8125rem/1.75 var(--mono); color: var(--dim); }
+.term .c { color: var(--fg); } .term .k { color: var(--seafoam); }
+
+/* pricing */
+.plans { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.25rem; margin-top: 2.5rem; }
+.plan { padding: 1.75rem; border-radius: 1.25rem; border: 1px solid rgba(255,255,255,.09); background: rgba(255,255,255,.025); display: flex; flex-direction: column; gap: 1.1rem; min-width: 0; }
+.plan.pro { background: linear-gradient(160deg, rgb(var(--wr) var(--wg) var(--wb) / 0.16), rgba(255,255,255,.035) 60%); border-color: rgb(var(--wr) var(--wg) var(--wb) / 0.35); }
+.plan h3 { margin: 0; font: 400 1.5rem/1.1 var(--display); letter-spacing: -0.015em; }
+.price { font: 250 2.9rem/1 var(--display); letter-spacing: -0.03em; font-variant-numeric: tabular-nums; }
+.price small { font: 400 0.9375rem var(--body); color: var(--dim); letter-spacing: 0; margin-left: 0.4rem; }
+.plan ul { margin: 0; padding: 0; list-style: none; display: grid; gap: 0.6rem; color: var(--dim); font-size: 0.9875rem; }
+.plan li { display: grid; grid-template-columns: 1.1rem 1fr; gap: 0.6rem; }
+.plan li::before { content: ""; width: 0.45rem; height: 0.45rem; margin-top: 0.55rem; border-radius: 30%; background: var(--seafoam); }
+.plan .btn { align-self: flex-start; margin-top: auto; }
+.fine { color: var(--faint); font-size: 0.875rem; margin: 1rem 0 0; max-width: 40rem; }
+
+/* pro themes */
+.rooms { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.25rem; margin-top: 2.5rem; }
+.room { margin: 0; min-width: 0; border-radius: 1rem; outline: none; }
+.room .shot { position: relative; aspect-ratio: 16 / 9; max-width: 100%; border-radius: 0.75rem; overflow: hidden; border: 1px solid rgba(255,255,255,.08); background: #111; }
+.room .shot img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: opacity .9s ease; }
+.room .shot img + img { opacity: 0; }
+.room:hover .shot img + img, .room:focus-visible .shot img + img, .room.night .shot img + img { opacity: 1; }
+.room:focus-visible .shot { box-shadow: 0 0 0 2px var(--seafoam); }
+.room .mood { position: absolute; left: 0.7rem; bottom: 0.6rem; padding: 0.3rem 0.65rem; border-radius: 999px; background: rgba(0,0,0,.45); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); color: var(--fg); font: 500 0.75rem/1 var(--mono); }
+.room .mood::before { content: "Evening"; }
+.room:hover .mood::before, .room:focus-visible .mood::before, .room.night .mood::before { content: "Night"; }
+.room figcaption { display: grid; gap: 0.35rem; margin-top: 0.9rem; }
+.room h3 { margin: 0; display: flex; align-items: center; gap: 0.6rem; font: 400 1.35rem/1.1 var(--display); letter-spacing: -0.015em; }
+.room .chips { display: inline-flex; gap: 0.25rem; }
+.room .chips i { width: 0.7rem; height: 0.7rem; border-radius: 30%; border: 1px solid rgba(255,255,255,.18); }
+.room p { margin: 0; color: var(--dim); font-size: 0.9375rem; }
+.room .mono { color: var(--faint); font-size: 0.8125rem; }
+
+/* faq */
+.faq { margin-top: 2rem; max-width: 46rem; }
+.faq details { border-top: 1px solid rgba(255,255,255,.08); padding-block: 1.1rem; }
+.faq summary { cursor: pointer; font-weight: 600; list-style: none; display: flex; justify-content: space-between; gap: 1rem; }
+.faq summary::-webkit-details-marker { display: none; }
+.faq summary::after { content: "+"; color: var(--dim); font-weight: 400; transition: transform .3s ease; }
+.faq details[open] summary::after { transform: rotate(45deg); }
+.faq p { color: var(--dim); margin: 0.6rem 0 0; }
+
+footer { padding-block: 3rem 4rem; border-top: 1px solid rgba(255,255,255,.07); color: var(--faint); font-size: 0.875rem; display: flex; flex-wrap: wrap; gap: 1rem 2rem; justify-content: space-between; }
+footer a { color: var(--dim); }
+
+@media (max-width: 860px) {
+  .screens { grid-template-columns: minmax(0, 1fr); }
+  .features, .install, .plans, .rooms { grid-template-columns: minmax(0, 1fr); }
+  .navlinks a:not(.keep) { display: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, :root { transition: none !important; scroll-behavior: auto; }
+}
+</style>
+</head>
+<body>
+
+
+<nav class="wrap" aria-label="Main">
+  <a class="mark" href="#top"><i aria-hidden="true"></i>Glasshouse</a>
+  <div class="navlinks">
+    <a href="#screens">Screens</a>
+    <a href="#themes">Themes</a>
+    <a href="#install">Install</a>
+    <a href="#pricing" class="keep">Pricing</a>
+    <a href="https://github.com/NicholasCallum22/glasshouse" class="keep">GitHub</a>
+  </div>
+</nav>
+
+<main id="top">
+  <header class="wrap hero">
+    <div>
+      <p class="label">For Android TV and Google TV</p>
+      <h1>Your TV, <em>without</em> the billboard.</h1>
+      <p class="lede">Glasshouse replaces the ad-filled Google TV home with a calm glass one. Your apps in tinted squircles, the room washed in the colour of whatever you pick, and nothing sponsored anywhere.</p>
+      <div class="ctas">
+        <a class="btn primary" id="buy" href="#pricing">Get Glasshouse Pro · $7</a>
+        <a class="btn ghost" href="https://github.com/NicholasCallum22/glasshouse#install">Install free from GitHub</a>
+      </div>
+      <p class="spec mono">≈500 KB · no network permission · Android 8+ · installed over Wi‑Fi</p>
+    </div>
+    <figure class="tv" id="tv" aria-label="Glasshouse on a TV">
+      <div class="screen">
+        <img src="img/home-rose.jpg" alt="Glasshouse Home with Netflix focused: the clock, the Home center, Continue, and a dock of cream glass tiles over a rose wash" width="1280" height="720">
+        <img src="img/home-blue.jpg" alt="The same screen with Live TV focused; the wash has turned blue" width="1280" height="720">
+      </div>
+      <figcaption class="mono"><span id="tvcap">Netflix focused · rose wash</span><span>Xiaomi MiTV · Google TV 14</span></figcaption>
+    </figure>
+  </header>
+
+  <section id="screens" class="wrap" aria-labelledby="screens-h">
+    <p class="label">On the TV</p>
+    <h2 id="screens-h">Everything you reach for, one press away.</h2>
+    <div class="screens">
+      <figure>
+        <img src="img/quick-panel.jpg" alt="The Quick panel: Wi‑Fi and Bluetooth toggles, Picture, Sound, a volume slider, recent apps" loading="lazy" width="1280" height="720">
+        <figcaption><b>Quick panel</b>The remote's Settings button opens it over any app: Wi‑Fi, Bluetooth, inputs, picture, sound, a sleep timer and the volume.</figcaption>
+      </figure>
+      <figure>
+        <img src="img/app-library.jpg" alt="The App library: a frosted grid of glass app tiles" loading="lazy" width="1280" height="720">
+        <figcaption><b>App library</b>Every app you have installed, in one frosted grid. Add an app to Home or take it off.</figcaption>
+      </figure>
+      <figure>
+        <img src="img/clock.jpg" alt="The clock screensaver: a thin clock and the date on a dark glow" loading="lazy" width="1280" height="720">
+        <figcaption><b>Clock</b>Leave Home alone for ten minutes and it dims to a drifting clock, so nothing burns in.</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section class="wrap" aria-labelledby="features-h">
+    <p class="label">What's in it</p>
+    <h2 id="features-h">A home screen that gets out of the way.</h2>
+    <div class="features">
+      <div class="feature"><span class="sq" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="4" y="4" width="16" height="16" rx="5"/></svg></span><div><h3>Glass app tiles</h3><p>Every app in the same tinted squircle, its own mark lifted onto dark glass. No more mismatched banners.</p></div></div>
+      <div class="feature"><span class="sq" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="8"/><path d="M12 4a8 8 0 0 1 0 16z" fill="currentColor"/></svg></span><div><h3>Colour wash</h3><p>The whole screen takes a soft pastel of the app you focus, and morphs as you move.</p></div></div>
+      <div class="feature"><span class="sq" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4 4"/></svg></span><div><h3>Home center</h3><p>Search or ask Google, then Inputs, Picture, Sound and Clock, next to the apps you opened last.</p></div></div>
+      <div class="feature"><span class="sq" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 18V6l10-2v12"/><circle cx="6.5" cy="18" r="2.5"/><circle cx="16.5" cy="16" r="2.5"/></svg></span><div><h3>Now Playing</h3><p>While music plays, the clock and the track take turns in the corner. The play button takes the album art's colour.</p></div></div>
+      <div class="feature"><span class="sq" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><path d="M12 3v2.5M12 18.5V21M3 12h2.5M18.5 12H21"/></svg></span><div><h3>Quick panel</h3><p>Settings for the things you actually change, over Netflix or anything else that's playing.</p></div></div>
+      <div class="feature"><span class="sq" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="6" width="18" height="12" rx="3"/><circle cx="8" cy="12" r="1.3" fill="currentColor"/><circle cx="16" cy="12" r="1.3" fill="currentColor"/></svg></span><div><h3>Remote shortcuts</h3><p>The colour buttons open your favourite apps; the App library button opens the library.</p></div></div>
+      <div class="feature"><span class="sq" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 16c3-6 5-6 8 0s5 6 8 0"/></svg></span><div><h3>Soft motion</h3><p>Slow fades, a slight tilt and a sweep of light on focus, tuned so a 2 GB TV keeps up.</p></div></div>
+      <div class="feature"><span class="sq" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12a8 8 0 1 0 2.3-5.6L4 8.7"/><path d="M4 4v4.7h4.7"/></svg></span><div><h3>One-line undo</h3><p>Nothing is uninstalled. <span class="mono">./uninstall.sh</span> puts the stock home back exactly as it was.</p></div></div>
+    </div>
+  </section>
+
+  <section id="install" class="wrap" aria-labelledby="install-h">
+    <p class="label">Install</p>
+    <h2 id="install-h">Ten minutes over Wi‑Fi. No cable, no root.</h2>
+    <p class="sub">Turn on USB debugging on the TV (Settings → System → About, press OK on Build seven times), then run one command on a computer on the same Wi‑Fi. The installer works through the order Google TV needs.</p>
+    <div class="install">
+      <ol class="steps">
+        <li><div><b>Connect</b><span>Finds the TV over ADB and checks it runs Android 8 or newer.</span></div></li>
+        <li><div><b>Check your Wi‑Fi</b><span>Google TV's setup wizard can own the network it saved. If it does, the installer stops and tells you how to re‑save it, so you never lose Wi‑Fi.</span></div></li>
+        <li><div><b>Hand over Home</b><span>Opens Glasshouse, turns the stock home off and makes Glasshouse Home. If Home doesn't land, it puts the stock one back.</span></div></li>
+        <li><div><b>Finish the look</b><span>Turns on the remote buttons and Now Playing, then applies the Glasshouse theme.</span></div></li>
+      </ol>
+      <div class="term" role="img" aria-label="The installer's output in a terminal">
+        <div class="bar" aria-hidden="true"><i></i><i></i><i></i></div>
+<pre><span class="c">$ ./install.sh 192.168.1.50</span>
+<b class="c">Connecting to 192.168.1.50</b>
+  <span class="k">✓</span> MiTV-AXFU0 · Android 14
+  <span class="k">✓</span> Home is launcherx/.home.HomeActivity
+<b class="c">Google TV's setup wizard also answers Home</b>
+  <span class="k">✓</span> Wi-Fi belongs to the system
+  <span class="k">✓</span> Setup wizard off
+<b class="c">Installing Glasshouse</b>
+  <span class="k">✓</span> Home is Glasshouse
+  <span class="k">✓</span> Remote buttons on
+  <span class="k">✓</span> Now Playing can see what is playing
+<b class="c">Press Home on your remote.</b></pre>
+      </div>
+    </div>
+  </section>
+
+  <section id="themes" class="wrap" aria-labelledby="themes-h">
+    <p class="label">Glasshouse Pro themes</p>
+    <h2 id="themes-h">Three more rooms, lit by the time of day.</h2>
+    <p class="sub">Each Pro theme has a morning, an evening and a night wallpaper. Glasshouse switches between them at sunrise, noon and just after sunset, and the frosted glass, icons and accent are tuned to match.</p>
+    <div class="rooms">
+      <figure class="room" tabindex="0" data-wash="232,150,100">
+        <div class="shot">
+          <img src="img/pro/dusk-evening.jpg" alt="Dusk theme, evening: apps on warm amber glass with ivory icons" loading="lazy" width="1280" height="720">
+          <img src="img/pro/dusk-night.jpg" alt="Dusk theme, night: the Quick panel over deep plum with apricot toggles" loading="lazy" width="1280" height="720">
+          <span class="mood" aria-hidden="true"></span>
+        </div>
+        <figcaption>
+          <h3>Dusk <span class="chips" aria-hidden="true"><i style="background:#F6E7D2"></i><i style="background:#FFC59E"></i><i style="background:#2A1E1F"></i></span></h3>
+          <p>Golden hour that never leaves the room. Peach mornings, an amber evening sun low behind the dock, plum nights.</p>
+          <span class="mono">ivory icons · apricot accent · rim focus</span>
+        </figcaption>
+      </figure>
+      <figure class="room" tabindex="0" data-wash="110,160,190">
+        <div class="shot">
+          <img src="img/pro/fjord-evening.jpg" alt="Fjord theme, evening: apps on slate-blue glass with cool white icons" loading="lazy" width="1280" height="720">
+          <img src="img/pro/fjord-night.jpg" alt="Fjord theme, night: the Quick panel under a soft green aurora" loading="lazy" width="1280" height="720">
+          <span class="mood" aria-hidden="true"></span>
+        </div>
+        <figcaption>
+          <h3>Fjord <span class="chips" aria-hidden="true"><i style="background:#EAF2F4"></i><i style="background:#9CD8F2"></i><i style="background:#1F2A31"></i></span></h3>
+          <p>Nordic daylight. Morning mist, a slate dusk, and an aurora at night. Six roomier tiles to a row.</p>
+          <span class="mono">frost-white icons · glacier accent · halo focus</span>
+        </figcaption>
+      </figure>
+      <figure class="room" tabindex="0" data-wash="150,130,90">
+        <div class="shot">
+          <img src="img/pro/obsidian-evening.jpg" alt="Obsidian theme: apps on near-black glass with soft stone icons" loading="lazy" width="1280" height="720">
+          <img src="img/pro/obsidian-night.jpg" alt="Obsidian theme, night: the Quick panel on black with gold toggles" loading="lazy" width="1280" height="720">
+          <span class="mood" aria-hidden="true"></span>
+        </div>
+        <figcaption>
+          <h3>Obsidian <span class="chips" aria-hidden="true"><i style="background:#CFC9BD"></i><i style="background:#D8BE86"></i><i style="background:#000000"></i></span></h3>
+          <p>For OLED and dark rooms. Black glass with one streak of light, a thread of gold, and a clock on true black.</p>
+          <span class="mono">stone icons · gold accent · pure-black clock</span>
+        </figcaption>
+      </figure>
+    </div>
+    <p class="fine">Previews are simulated on a real Glasshouse screenshot; colours on your TV depend on its panel. Hover or select a theme to see it at night.</p>
+  </section>
+
+  <section id="pricing" class="wrap" aria-labelledby="pricing-h">
+    <p class="label">Pricing</p>
+    <h2 id="pricing-h">Free to build. Seven dollars for the extra rooms.</h2>
+    <div class="plans">
+      <div class="plan">
+        <h3>Open source</h3>
+        <div class="price">$0</div>
+        <ul>
+          <li>Every Glasshouse feature, MIT licensed</li>
+          <li>The Glasshouse, Lumen and Default themes</li>
+          <li>Build it yourself: needs JDK 17 and the Android SDK</li>
+          <li>The same safe installer and undo script</li>
+        </ul>
+        <a class="btn ghost" href="https://github.com/NicholasCallum22/glasshouse">View on GitHub</a>
+      </div>
+      <div class="plan pro">
+        <h3>Glasshouse Pro</h3>
+        <div class="price">$7<small>one time · about ₹600</small></div>
+        <ul>
+          <li>Three Pro themes: Dusk, Fjord and Obsidian, each with wallpapers that follow the sun</li>
+          <li>A ready-made APK: no Java, no Android SDK, nothing to build</li>
+          <li>New Pro themes and fixes for a year</li>
+          <li>Email help if your TV gives you trouble</li>
+        </ul>
+        <a class="btn primary" id="buy-pro" href="https://github.com/NicholasCallum22/glasshouse">Get Glasshouse Pro</a>
+      </div>
+    </div>
+    <p class="fine">Prices in US dollars; local taxes are worked out at checkout. Pro pays for the time it takes to keep Glasshouse working on new TVs and firmware.</p>
+  </section>
+
+  <section class="wrap" aria-labelledby="faq-h">
+    <p class="label">Questions</p>
+    <h2 id="faq-h">Before you plug in a cable you don't need.</h2>
+    <div class="faq">
+      <details><summary>Will it break my TV?</summary><p>Nothing is uninstalled or rooted. Glasshouse turns the stock home off with Android's own <span class="mono">pm disable-user</span>, and <span class="mono">./uninstall.sh</span> turns it back on. Run the undo before a factory reset, so Google TV's setup wizard is there for it.</p></details>
+      <details><summary>Which TVs does it work on?</summary><p>Android TV and Google TV sets on Android 8 or newer. It's tested on a Xiaomi MiTV‑AXFU0 with Google TV 14, and the launcher it's built on runs on about 290 models. Fire TV doesn't hand Home to other launchers, so it won't work there.</p></details>
+      <details><summary>Why does my TV still show its own volume bar?</summary><p>Some TVs draw the volume bar in the system itself, before any app sees the button. No launcher can restyle that one. The Quick panel's volume slider is in Glasshouse colours.</p></details>
+      <details><summary>Why pay if the code is open?</summary><p>You don't have to: every feature is free. Pro adds the three Pro themes and a ready-made APK for people who'd rather not install Java and the Android SDK. Buying it also pays for fixes when a firmware update changes something.</p></details>
+      <details><summary>How do I put a Pro theme on?</summary><p>Copy the theme folders from the Pro pack into your Glasshouse folder's <span class="mono">themes/</span> and run <span class="mono">TV_HOST=&lt;TV IP&gt; tools/theme.sh themes/dusk</span> (or fjord, or obsidian). It takes a few seconds and doesn't touch your apps. Run the same with <span class="mono">themes/glasshouse</span> to go back.</p></details>
+      <details><summary>Does Glasshouse show ads or collect data?</summary><p>No. The launcher has no internet permission at all, so it can't send anything anywhere. Now Playing reads what's playing on the TV itself.</p></details>
+    </div>
+  </section>
+</main>
+
+<footer class="wrap">
+  <span>Glasshouse is built on <a href="https://github.com/Gathin23/cleanyourtv">CleanYourTV</a> by Gathin (MIT) and is not run or endorsed by it.</span>
+  <span>Not affiliated with Google or Xiaomi. App names belong to their owners. <a href="https://github.com/NicholasCallum22/glasshouse/blob/main/LICENSE">MIT licence</a></span>
+</footer>
+
+<script>
+// The Pro checkout. Paste your store's checkout link here; until then the button leads to the free build.
+const CHECKOUT_URL = "";
+(function () {
+  if (CHECKOUT_URL) {
+    // Lemon Squeezy's overlay checkout: the buy buttons open the checkout over the page instead of leaving it.
+    // Where lemon.js can't load, the same links still go straight to the checkout page.
+    for (const id of ["buy", "buy-pro"]) {
+      const a = document.getElementById(id);
+      if (a) { a.href = CHECKOUT_URL; a.classList.add("lemonsqueezy-button"); }
+    }
+    if (/lemonsqueezy\.com/.test(CHECKOUT_URL)) {
+      const s = document.createElement("script");
+      s.src = "https://app.lemonsqueezy.com/js/lemon.js"; s.defer = true;
+      s.onload = function () { if (window.createLemonSqueezy) window.createLemonSqueezy(); };
+      document.head.appendChild(s);
+    }
+  } else {
+    const pro = document.getElementById("buy-pro");
+    if (pro) pro.textContent = "Pro launches soon · build free now";
+  }
+  // The hero: the TV alternates between two focused apps and the room follows its colour, as Glasshouse does.
+  // A Pro theme under the pointer (or keyboard focus) washes the room in its colour; a tap flips it to night.
+  let held = false;
+  const wash = function (w) {
+    const root = document.documentElement.style;
+    root.setProperty("--wr", w[0]); root.setProperty("--wg", w[1]); root.setProperty("--wb", w[2]);
+  };
+  for (const room of document.querySelectorAll(".room")) {
+    const w = room.dataset.wash.split(",").map(Number);
+    room.addEventListener("pointerenter", function () { held = true; wash(w); });
+    room.addEventListener("focus", function () { held = true; wash(w); });
+    room.addEventListener("pointerleave", function () { held = false; });
+    room.addEventListener("blur", function () { held = false; });
+    room.addEventListener("click", function (e) { if (e.pointerType !== "mouse") room.classList.toggle("night"); });
+    room.addEventListener("keydown", function (e) {
+      if (e.key === "Enter" || e.key === " ") { e.preventDefault(); room.classList.toggle("night"); }
+    });
+  }
+  const tv = document.getElementById("tv"), cap = document.getElementById("tvcap");
+  const looks = [
+    { wash: [214, 120, 120], cap: "Netflix focused · rose wash" },
+    { wash: [104, 136, 206], cap: "Live TV focused · blue wash" }
+  ];
+  let i = 0;
+  const reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (!tv || reduce) return;
+  setInterval(function () {
+    i = (i + 1) % looks.length;
+    tv.classList.toggle("alt", i === 1);
+    if (!held) wash(looks[i].wash);
+    if (cap) cap.textContent = looks[i].cap;
+  }, 5200);
+})();
+</script>
+</body>
+</html>
