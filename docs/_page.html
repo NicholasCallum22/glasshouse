@@ -1,6 +1,15 @@
 <title>Glasshouse</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <meta name="description" content="Glasshouse is a calm glass home screen for Android TV and Google TV: tinted glass app tiles, a colour wash, Now Playing and a Quick panel, with no ads. Installed over Wi-Fi.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Glasshouse: your TV, without the billboard">
+<meta property="og:description" content="A calm glass home screen for Google TV and Android TV. No ads, free and open source.">
+<meta property="og:url" content="https://nicholascallum22.github.io/glasshouse/">
+<meta property="og:image" content="https://nicholascallum22.github.io/glasshouse/img/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#0d0e0f">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..600&family=Figtree:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
@@ -362,9 +371,17 @@ footer a { color: var(--dim); }
 const CHECKOUT_URL = "";
 (function () {
   if (CHECKOUT_URL) {
+    // Lemon Squeezy's overlay checkout: the buy buttons open the checkout over the page instead of leaving it.
+    // Where lemon.js can't load, the same links still go straight to the checkout page.
     for (const id of ["buy", "buy-pro"]) {
       const a = document.getElementById(id);
-      if (a) a.href = CHECKOUT_URL;
+      if (a) { a.href = CHECKOUT_URL; a.classList.add("lemonsqueezy-button"); }
+    }
+    if (/lemonsqueezy\.com/.test(CHECKOUT_URL)) {
+      const s = document.createElement("script");
+      s.src = "https://app.lemonsqueezy.com/js/lemon.js"; s.defer = true;
+      s.onload = function () { if (window.createLemonSqueezy) window.createLemonSqueezy(); };
+      document.head.appendChild(s);
     }
   } else {
     const pro = document.getElementById("buy-pro");

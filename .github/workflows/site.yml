@@ -1,0 +1,27 @@
+# Keeps the gh-pages branch in step with docs/ on main, so the website is the same whichever branch
+# GitHub Pages serves (Settings → Pages: "gh-pages / (root)" or "main / docs").
+name: Website
+on:
+  push:
+    branches: [main]
+    paths: ["docs/**"]
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  mirror:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Publish docs/ to gh-pages
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          rm -f docs/_page.html
+          git checkout --orphan gh-pages-new
+          git rm -rq --cached .
+          find . -mindepth 1 -maxdepth 1 ! -name .git ! -name docs -exec rm -rf {} +
+          cp -r docs/. . && rm -rf docs
+          git add -A
+          git commit -qm "Website from main@${GITHUB_SHA::7}"
+          git push -qf origin HEAD:gh-pages
