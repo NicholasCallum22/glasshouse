@@ -22,3 +22,10 @@ launcher/replay_pid*.log
 
 # install.sh records what it changed on each TV, for uninstall.sh
 .glasshouse-state-*
+
+# the paid Pro pack is never committed
+Glasshouse-Pro*/
+Glasshouse-Pro*.zip
+themes/dusk/
+themes/fjord/
+themes/obsidian/

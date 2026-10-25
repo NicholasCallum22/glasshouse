@@ -46,8 +46,9 @@ Google TV needs: it checks that the setup wizard doesn't own your Wi‑Fi, turns
 launcher is still Home, hands Home to Glasshouse and rolls back if that doesn't stick, then turns on the remote
 buttons, Now Playing and the theme.
 
-**Glasshouse Pro** skips the build: a ready-made APK, the one-command installer and every theme, for people who
-don't want to set up Java and the Android SDK. See the [website](https://nicholascallum22.github.io/glasshouse/).
+**Glasshouse Pro** ($7, one time) adds three themes, Dusk, Fjord and Obsidian, whose wallpapers follow the sun,
+and a ready-made APK for people who don't want to set up Java and the Android SDK. See [`pro/`](pro/README.md) and
+the [website](https://nicholascallum22.github.io/glasshouse/#themes).
 
 Undo everything at any time, and always before a factory reset:
 
@@ -57,7 +58,8 @@ Undo everything at any time, and always before a factory reset:
 
 ## Themes
 
-`themes/glasshouse` is the full look; `themes/lumen` and `themes/default` are alternatives. Every switch is
+`themes/glasshouse` is the full look; `themes/lumen` and `themes/default` are alternatives, and the Pro pack adds
+Dusk, Fjord and Obsidian ([previews](pro/README.md)). Every switch is
 documented in [`themes/README.md`](themes/README.md), and a theme changes without a rebuild:
 
 ```bash

@@ -128,6 +128,24 @@ h2 { margin: 0.6rem 0 0; font: 300 clamp(1.9rem, 3.6vw, 2.9rem)/1.05 var(--displ
 .plan .btn { align-self: flex-start; margin-top: auto; }
 .fine { color: var(--faint); font-size: 0.875rem; margin: 1rem 0 0; max-width: 40rem; }
 
+/* pro themes */
+.rooms { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.25rem; margin-top: 2.5rem; }
+.room { margin: 0; min-width: 0; border-radius: 1rem; outline: none; }
+.room .shot { position: relative; aspect-ratio: 16 / 9; max-width: 100%; border-radius: 0.75rem; overflow: hidden; border: 1px solid rgba(255,255,255,.08); background: #111; }
+.room .shot img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: opacity .9s ease; }
+.room .shot img + img { opacity: 0; }
+.room:hover .shot img + img, .room:focus-visible .shot img + img, .room.night .shot img + img { opacity: 1; }
+.room:focus-visible .shot { box-shadow: 0 0 0 2px var(--seafoam); }
+.room .mood { position: absolute; left: 0.7rem; bottom: 0.6rem; padding: 0.3rem 0.65rem; border-radius: 999px; background: rgba(0,0,0,.45); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); color: var(--fg); font: 500 0.75rem/1 var(--mono); }
+.room .mood::before { content: "Evening"; }
+.room:hover .mood::before, .room:focus-visible .mood::before, .room.night .mood::before { content: "Night"; }
+.room figcaption { display: grid; gap: 0.35rem; margin-top: 0.9rem; }
+.room h3 { margin: 0; display: flex; align-items: center; gap: 0.6rem; font: 400 1.35rem/1.1 var(--display); letter-spacing: -0.015em; }
+.room .chips { display: inline-flex; gap: 0.25rem; }
+.room .chips i { width: 0.7rem; height: 0.7rem; border-radius: 30%; border: 1px solid rgba(255,255,255,.18); }
+.room p { margin: 0; color: var(--dim); font-size: 0.9375rem; }
+.room .mono { color: var(--faint); font-size: 0.8125rem; }
+
 /* faq */
 .faq { margin-top: 2rem; max-width: 46rem; }
 .faq details { border-top: 1px solid rgba(255,255,255,.08); padding-block: 1.1rem; }
@@ -142,7 +160,7 @@ footer a { color: var(--dim); }
 
 @media (max-width: 860px) {
   .screens { grid-template-columns: minmax(0, 1fr); }
-  .features, .install, .plans { grid-template-columns: minmax(0, 1fr); }
+  .features, .install, .plans, .rooms { grid-template-columns: minmax(0, 1fr); }
   .navlinks a:not(.keep) { display: none; }
 }
 @media (prefers-reduced-motion: reduce) {
@@ -154,6 +172,7 @@ footer a { color: var(--dim); }
   <a class="mark" href="#top"><i aria-hidden="true"></i>Glasshouse</a>
   <div class="navlinks">
     <a href="#screens">Screens</a>
+    <a href="#themes">Themes</a>
     <a href="#install">Install</a>
     <a href="#pricing" class="keep">Pricing</a>
     <a href="https://github.com/NicholasCallum22/glasshouse" class="keep">GitHub</a>
@@ -244,18 +263,63 @@ footer a { color: var(--dim); }
     </div>
   </section>
 
+  <section id="themes" class="wrap" aria-labelledby="themes-h">
+    <p class="label">Glasshouse Pro themes</p>
+    <h2 id="themes-h">Three more rooms, lit by the time of day.</h2>
+    <p class="sub">Each Pro theme has a morning, an evening and a night wallpaper. Glasshouse switches between them at sunrise, noon and just after sunset, and the frosted glass, icons and accent are tuned to match.</p>
+    <div class="rooms">
+      <figure class="room" tabindex="0" data-wash="232,150,100">
+        <div class="shot">
+          <img src="img/pro/dusk-evening.jpg" alt="Dusk theme, evening: apps on warm amber glass with ivory icons" loading="lazy" width="1280" height="720">
+          <img src="img/pro/dusk-night.jpg" alt="Dusk theme, night: the Quick panel over deep plum with apricot toggles" loading="lazy" width="1280" height="720">
+          <span class="mood" aria-hidden="true"></span>
+        </div>
+        <figcaption>
+          <h3>Dusk <span class="chips" aria-hidden="true"><i style="background:#F6E7D2"></i><i style="background:#FFC59E"></i><i style="background:#2A1E1F"></i></span></h3>
+          <p>Golden hour that never leaves the room. Peach mornings, an amber evening sun low behind the dock, plum nights.</p>
+          <span class="mono">ivory icons · apricot accent · rim focus</span>
+        </figcaption>
+      </figure>
+      <figure class="room" tabindex="0" data-wash="110,160,190">
+        <div class="shot">
+          <img src="img/pro/fjord-evening.jpg" alt="Fjord theme, evening: apps on slate-blue glass with cool white icons" loading="lazy" width="1280" height="720">
+          <img src="img/pro/fjord-night.jpg" alt="Fjord theme, night: the Quick panel under a soft green aurora" loading="lazy" width="1280" height="720">
+          <span class="mood" aria-hidden="true"></span>
+        </div>
+        <figcaption>
+          <h3>Fjord <span class="chips" aria-hidden="true"><i style="background:#EAF2F4"></i><i style="background:#9CD8F2"></i><i style="background:#1F2A31"></i></span></h3>
+          <p>Nordic daylight. Morning mist, a slate dusk, and an aurora at night. Six roomier tiles to a row.</p>
+          <span class="mono">frost-white icons · glacier accent · halo focus</span>
+        </figcaption>
+      </figure>
+      <figure class="room" tabindex="0" data-wash="150,130,90">
+        <div class="shot">
+          <img src="img/pro/obsidian-evening.jpg" alt="Obsidian theme: apps on near-black glass with soft stone icons" loading="lazy" width="1280" height="720">
+          <img src="img/pro/obsidian-night.jpg" alt="Obsidian theme, night: the Quick panel on black with gold toggles" loading="lazy" width="1280" height="720">
+          <span class="mood" aria-hidden="true"></span>
+        </div>
+        <figcaption>
+          <h3>Obsidian <span class="chips" aria-hidden="true"><i style="background:#CFC9BD"></i><i style="background:#D8BE86"></i><i style="background:#000000"></i></span></h3>
+          <p>For OLED and dark rooms. Black glass with one streak of light, a thread of gold, and a clock on true black.</p>
+          <span class="mono">stone icons · gold accent · pure-black clock</span>
+        </figcaption>
+      </figure>
+    </div>
+    <p class="fine">Previews are simulated on a real Glasshouse screenshot; colours on your TV depend on its panel. Hover or select a theme to see it at night.</p>
+  </section>
+
   <section id="pricing" class="wrap" aria-labelledby="pricing-h">
     <p class="label">Pricing</p>
-    <h2 id="pricing-h">Free to build. Seven dollars to skip the build.</h2>
+    <h2 id="pricing-h">Free to build. Seven dollars for the extra rooms.</h2>
     <div class="plans">
       <div class="plan">
         <h3>Open source</h3>
         <div class="price">$0</div>
         <ul>
           <li>Every Glasshouse feature, MIT licensed</li>
+          <li>The Glasshouse, Lumen and Default themes</li>
           <li>Build it yourself: needs JDK 17 and the Android SDK</li>
           <li>The same safe installer and undo script</li>
-          <li>Help from the community on GitHub</li>
         </ul>
         <a class="btn ghost" href="https://github.com/NicholasCallum22/glasshouse">View on GitHub</a>
       </div>
@@ -263,9 +327,9 @@ footer a { color: var(--dim); }
         <h3>Glasshouse Pro</h3>
         <div class="price">$7<small>one time · about ₹600</small></div>
         <ul>
+          <li>Three Pro themes: Dusk, Fjord and Obsidian, each with wallpapers that follow the sun</li>
           <li>A ready-made APK: no Java, no Android SDK, nothing to build</li>
-          <li>The one-command installer for macOS and Linux (Windows via WSL)</li>
-          <li>Every theme, and a year of updates</li>
+          <li>New Pro themes and fixes for a year</li>
           <li>Email help if your TV gives you trouble</li>
         </ul>
         <a class="btn primary" id="buy-pro" href="https://github.com/NicholasCallum22/glasshouse">Get Glasshouse Pro</a>
@@ -281,7 +345,8 @@ footer a { color: var(--dim); }
       <details><summary>Will it break my TV?</summary><p>Nothing is uninstalled or rooted. Glasshouse turns the stock home off with Android's own <span class="mono">pm disable-user</span>, and <span class="mono">./uninstall.sh</span> turns it back on. Run the undo before a factory reset, so Google TV's setup wizard is there for it.</p></details>
       <details><summary>Which TVs does it work on?</summary><p>Android TV and Google TV sets on Android 8 or newer. It's tested on a Xiaomi MiTV‑AXFU0 with Google TV 14, and the launcher it's built on runs on about 290 models. Fire TV doesn't hand Home to other launchers, so it won't work there.</p></details>
       <details><summary>Why does my TV still show its own volume bar?</summary><p>Some TVs draw the volume bar in the system itself, before any app sees the button. No launcher can restyle that one. The Quick panel's volume slider is in Glasshouse colours.</p></details>
-      <details><summary>Why pay if the code is open?</summary><p>You don't have to. Pro is for people who'd rather not install Java and the Android SDK to build an APK. Buying it also pays for fixes when a firmware update changes something.</p></details>
+      <details><summary>Why pay if the code is open?</summary><p>You don't have to: every feature is free. Pro adds the three Pro themes and a ready-made APK for people who'd rather not install Java and the Android SDK. Buying it also pays for fixes when a firmware update changes something.</p></details>
+      <details><summary>How do I put a Pro theme on?</summary><p>Copy the theme folders from the Pro pack into your Glasshouse folder's <span class="mono">themes/</span> and run <span class="mono">TV_HOST=&lt;TV IP&gt; tools/theme.sh themes/dusk</span> (or fjord, or obsidian). It takes a few seconds and doesn't touch your apps. Run the same with <span class="mono">themes/glasshouse</span> to go back.</p></details>
       <details><summary>Does Glasshouse show ads or collect data?</summary><p>No. The launcher has no internet permission at all, so it can't send anything anywhere. Now Playing reads what's playing on the TV itself.</p></details>
     </div>
   </section>
@@ -306,6 +371,23 @@ const CHECKOUT_URL = "";
     if (pro) pro.textContent = "Pro launches soon · build free now";
   }
   // The hero: the TV alternates between two focused apps and the room follows its colour, as Glasshouse does.
+  // A Pro theme under the pointer (or keyboard focus) washes the room in its colour; a tap flips it to night.
+  let held = false;
+  const wash = function (w) {
+    const root = document.documentElement.style;
+    root.setProperty("--wr", w[0]); root.setProperty("--wg", w[1]); root.setProperty("--wb", w[2]);
+  };
+  for (const room of document.querySelectorAll(".room")) {
+    const w = room.dataset.wash.split(",").map(Number);
+    room.addEventListener("pointerenter", function () { held = true; wash(w); });
+    room.addEventListener("focus", function () { held = true; wash(w); });
+    room.addEventListener("pointerleave", function () { held = false; });
+    room.addEventListener("blur", function () { held = false; });
+    room.addEventListener("click", function (e) { if (e.pointerType !== "mouse") room.classList.toggle("night"); });
+    room.addEventListener("keydown", function (e) {
+      if (e.key === "Enter" || e.key === " ") { e.preventDefault(); room.classList.toggle("night"); }
+    });
+  }
   const tv = document.getElementById("tv"), cap = document.getElementById("tvcap");
   const looks = [
     { wash: [214, 120, 120], cap: "Netflix focused · rose wash" },
@@ -317,10 +399,7 @@ const CHECKOUT_URL = "";
   setInterval(function () {
     i = (i + 1) % looks.length;
     tv.classList.toggle("alt", i === 1);
-    const root = document.documentElement.style, w = looks[i].wash;
-    root.setProperty("--wr", w[0]);
-    root.setProperty("--wg", w[1]);
-    root.setProperty("--wb", w[2]);
+    if (!held) wash(looks[i].wash);
     if (cap) cap.textContent = looks[i].cap;
   }, 5200);
 })();
