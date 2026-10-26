@@ -1,4 +1,4 @@
-# Shows a Sponsor button on the repo once GitHub Sponsors is enabled for NicholasCallum22.
-github: NicholasCallum22
-# Add the Glasshouse Pro checkout link here once the Lemon Squeezy store is live, e.g.:
-# custom: ["https://glasshouse.lemonsqueezy.com/buy/your-product-id"]
+# Glasshouse is free and open source. The one paid thing is Glasshouse Pro, so the Sponsor button
+# points there rather than at donation pages. Add a platform above a custom line to show it too.
+# github: NicholasCallum22
+custom: ["https://nicholascallum22.github.io/glasshouse/#pricing"]
